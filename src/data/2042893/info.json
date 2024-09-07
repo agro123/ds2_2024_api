@@ -1,0 +1,10 @@
+{
+    "nombre": "Leidy Estefania Parra",
+    "edad": 23,
+    "carrera": "Tecnología en Desarrollo de Software",
+    "semestre": 6,
+    "gustos": ["Viajar", "Comer", "Salir los fines de semana", "Pasear"],
+    "noGustos": ["Andar sin plata", "Los problemas"],
+    "foto": "https://lh3.googleusercontent.com/a/ACg8ocJi2Ieq2IdGqL6evdjNFFu5AdDYkb3QjNPF4a4cSgVOV_NmPi7Z=s192-c-rg-br100"
+}
+  

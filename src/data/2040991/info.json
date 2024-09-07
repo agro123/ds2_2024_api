@@ -1,0 +1,9 @@
+{
+    "nombre": "Sebastian Rey Escobar",
+    "edad": 23,
+    "carrera": "Tecnologia en Desarrollo de Software",
+    "semestre": 6,
+    "gustos": [ "Cine", "Videojuegos", "Cocinar", "comics/manga", "musica (Alvarito, Nsq, Yoshi)", "dormir"],
+    "noGustos": ["las mentirosas", "que me despierten", "tener hambre", "que me interrumpan en la ducha"],
+    "foto": "https://lh3.googleusercontent.com/a/ACg8ocKzxQOurOMxmJzIoW8vWaOoVINBdF2Y4rLXUGfji81pZ77_aAPt=s192-c-mo"
+}

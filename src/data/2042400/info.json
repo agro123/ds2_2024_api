@@ -1,0 +1,9 @@
+{
+    "nombre": "Alexandra Lerma",
+    "edad": 29,
+    "carrera": "Tecnologia Desarrollo de Software",
+    "semestre": 6,
+    "gustos": ["Manwhas", "League of legends", "Viajar"],
+    "noGustos": ["Despertarse temprano", "sol"],
+    "foto": "https://scontent.fclo9-1.fna.fbcdn.net/v/t39.30808-6/424586021_2584823515010332_6369003331003981000_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=nwBOV1VOSCQQ7kNvgEXcimZ&_nc_ht=scontent.fclo9-1.fna&oh=00_AYAs9JI4GLJzC6Yb0VNDWF6n7pCopZ6Zec-6Ugz8dKNkdQ&oe=66DC23AD"
+}
