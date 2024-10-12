@@ -1,1 +1,5 @@
-//todo
+import User from './userModel';
+
+export default {
+    User
+}

@@ -1,9 +1,0 @@
-{
-    "nombre": "Brandon Perdomo",
-    "edad": 25,
-    "carrera": "Tecnologia en Desarrollo de Software",
-    "semestre": 5,
-    "gustos": [ "Juegos", "Peliculas", "Programación", "Diseño", "Seguridad Informatica"],
-    "noGustos": ["Sancocho", "Mondongo", "Las motos Ninja", "Fumar", "Tatuajes"],
-    "foto": "https://lh3.googleusercontent.com/a/ACg8ocKWxkAyDAQhD4kkgbqbBtwi6F-CMdhqXKXnf2Ogz7x1ux-Qcg=s192-c-mo"
-}

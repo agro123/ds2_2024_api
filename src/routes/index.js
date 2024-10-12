@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getStudentByCode } from '../controllers/studentsController';
+import userRoutes from './userRoutes';
 
 const router = Router();
 
-router.get('/student/:code', getStudentByCode);
+router.use('/users', userRoutes);
 
-export default router;
+export default router

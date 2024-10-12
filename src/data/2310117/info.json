@@ -1,9 +1,0 @@
-{
-    "nombre": "Cristian Medina",
-    "edad": 24,
-    "carrera": "Sistemas",
-    "semestre": 6,
-    "gustos": ["Lectura", "Videojuegos", "Viajar", "Ciclismo"],
-    "noGustos": ["Despertarse temprano", "Empresas explotadoras"],
-    "foto": "https://lh3.googleusercontent.com/a/ACg8ocI2jyPqLBNHO2zoVpF7cB2RwWUGUTp6hIQPYjcpILqyEYmKOShz=s576-c-no"
-}
