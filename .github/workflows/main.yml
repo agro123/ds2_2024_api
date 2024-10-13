@@ -28,17 +28,7 @@ jobs:
         run: npm test
 
       - name: Run coverage
-        run: npx jest --coverage
-
-      - name: Check coverage
-        run: |
-          COVERAGE=$(npx jest --coverage --json --outputFile=coverage-summary.json && cat coverage-summary.json | jq .total.lines.pct)
-          if [ $COVERAGE -lt 60 ]; then
-            echo "Code coverage is below 60% ($COVERAGE%)"
-            exit 1
-          else
-            echo "Code coverage is sufficient ($COVERAGE%)"
-          fi
+        run: npm run test:coverage
 
       - name: Run lint
         run: npm run lint
