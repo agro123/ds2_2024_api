@@ -35,7 +35,7 @@ const main = async () => {
 
     app.use("/api/public", cors(), json(), router);
 
-    app.use("/api/private", cors(), json(), router);
+    //app.use("/api/private", cors(), json(), router);
 
     app.get("/", (req, res) => {
         res.send("This is working!");

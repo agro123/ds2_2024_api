@@ -10,4 +10,4 @@ router.post('/', controller.createUser);    // Crear un nuevo usuario
 router.put('/:id', controller.updateUser); // Actualizar un usuario existente
 router.delete('/:id', controller.deleteUser); // Eliminar un usuario
 
-export default router
+export default router;
