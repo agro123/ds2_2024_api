@@ -1,10 +1,10 @@
-import router from '../src/routes/userRoutes';
+import router from '../src/routes';
 import express from 'express';
 
 describe('Routes', () => {
   test('Verify if user routes exist', () => {
     const app = express();
-    app.use('/users', router);
+    app.use('/', router);
 
     const routes = router.stack;;
     // Verificar si están las rutas correctas
@@ -14,11 +14,11 @@ describe('Routes', () => {
     }));
 
     expect(registeredRoutes).toEqual([
-      { method: 'get', path: '/' },
-      { method: 'get', path: '/:id' },
-      { method: 'post', path: '/' },
-      { method: 'put', path: '/:id' },
-      { method: 'delete', path: '/:id' }
+      { method: 'get', path: '/users/' },
+      { method: 'get', path: '/users/:id' },
+      { method: 'post', path: '/users/' },
+      { method: 'put', path: '/users/:id' },
+      { method: 'delete', path: '/users/:id' }
     ]);
   });
 });
