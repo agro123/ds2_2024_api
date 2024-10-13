@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run coverage
+        run: npx jest --coverage
+
+      - name: Check coverage
+        run: |
+          COVERAGE=$(npx jest --coverage --json --outputFile=coverage-summary.json && cat coverage-summary.json | jq .total.lines.pct)
+          if [ $COVERAGE -lt 60 ]; then
+            echo "Code coverage is below 60% ($COVERAGE%)"
+            exit 1
+          else
+            echo "Code coverage is sufficient ($COVERAGE%)"
+          fi
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Download SonarQube Scanner
+        run: |
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonar-scanner-cli-4.6.2.2472-linux.zip -d $HOME
+
+      - name: Run SonarQube analysis
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          $HOME/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
+          -Dsonar.projectKey=your_project_key \
+          -Dsonar.sources=. \
+          -Dsonar.host.url=$SONAR_HOST_URL \
+          -Dsonar.login=$SONAR_TOKEN
