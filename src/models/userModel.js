@@ -1,15 +1,35 @@
-export const users = [
-    { id: 1, name: 'John Doe', email: 'john@example.com' },
-    { id: 2, name: 'Jane Doe', email: 'jane@example.com' }
-];
+import supabase from '../db/index';
+
 
 const User = {
-    getAllUsers: () => users,
-    getUserById: (id) => users.find(user => user.id === id),
-    createUser: (user) => {
-        user.id = users.length + 1;
-        users.push(user);
-        return user;
+    getAllUsers: async () => {
+        // * listo
+        const { data, error } = await supabase.from('users').select('*');
+
+        console.log(supabase, 'verificacion de la conexion al cliente');
+
+        if (error) {
+            console.error('Error al obtener los usuarios:', error);
+            return error;
+        }
+        console.log(data, 'data traida desde la peticion');
+        return data;
+    },
+    getUserById: async (id) => {
+        //TODO: pendiente por implementar
+        return users.find(user => user.id === id);
+    },
+    createUser: async (user) => {
+
+        const { data, error } = await supabase.from('users').insert([
+            { name: 'fernando', last_name: 'martines', username: 'feradmin', role: 2, created_by: 'castor', },
+        ]).select();
+
+        if (error) {
+            console.error('Error al crear el usuario:', error);
+            return error;
+        }
+        return data;
     },
     updateUser: (id, updatedUser) => {
         const index = users.findIndex(user => user.id === id);

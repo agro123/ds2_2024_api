@@ -1,8 +1,9 @@
 import User from '../models/userModel';
 
 // Obtener todos los usuarios
-const getUsers = (req, res) => {
-    const users = User.getAllUsers();
+const getUsers = async (req, res) => {
+    const users = await User.getAllUsers();
+    console.log(users);
     res.json(users);
 };
 
@@ -17,8 +18,8 @@ const getUser = (req, res) => {
 };
 
 // Crear un nuevo usuario
-const createUser = (req, res) => {
-    const newUser = User.createUser(req.body);
+const createUser = async (req, res) => {
+    const newUser = await User.createUser(req.body);
     res.status(201).json(newUser);
 };
 
