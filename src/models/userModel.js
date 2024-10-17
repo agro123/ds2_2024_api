@@ -15,10 +15,17 @@ const User = {
         return data;
     },
     getUserById: async (id) => {
-        //TODO: pendiente por implementar
-        //? Alexandra
-        // Recordar: Revisar el plugin de supabase para ver como llamar un usuario por un id especifico. 
-        return users.find(user => user.id === id);
+        const { data, error } = await supabase
+            .from('users')  // Nombre de la tabla
+            .select('*')   // Selecciona todos los campos, puedes especificar campos también
+            .eq('id', id)      // Filtro por id
+            .single()          // Para obtener un solo resultado
+            
+        if (error) {
+            console.error('Error fetching user:', error)
+            return null
+        }
+        return data
     },
     createUser: async (user) => {
         //TODO: pendiente por implementar
