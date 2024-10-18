@@ -1,17 +1,14 @@
 import supabase from '../db/index';
 
 const User = {
+    
     getAllUsers: async () => {
         // * listo
         const { data, error } = await supabase.from('users').select('*');
-
-        console.log(supabase, 'verificacion de la conexion al cliente');
-
         if (error) {
             console.error('Error al obtener los usuarios:', error);
             return error;
         }
-        console.log(data, 'data traida desde la peticion');
         return data;
     },
     getUserById: async (id) => {
