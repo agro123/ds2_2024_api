@@ -9,6 +9,7 @@ router.get('/users/:id', userController.getUser);        // Obtener un usuario p
 router.post('/users/', userController.createUser);       // Crear un nuevo usuario
 router.put('/users/:id', userController.updateUser);     // Actualizar un usuario existente
 router.delete('/users/:id', userController.deleteUser);  // Eliminar un usuario
+router.post('/users/login/', userController.loginUser);  // login de usuarios
 
 //PQRSD
 router.get('/pqrsd/', userController.getUsers);          // Obtener todos los usuarios
