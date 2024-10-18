@@ -15,17 +15,17 @@ const User = {
         return data;
     },
     getUserById: async (id) => {
+        // * listo
         const { data, error } = await supabase
-            .from('users')  // Nombre de la tabla
-            .select('*')   // Selecciona todos los campos, puedes especificar campos también
-            .eq('id', id)      // Filtro por id
-            .single()          // Para obtener un solo resultado
-            
+            .from('users')      // Nombre de la tabla
+            .select('*')        // Selecciona todos los campos, puedes especificar campos también
+            .eq('id', id)       // Filtro por id
+            .single();          // Para obtener un solo resultado
         if (error) {
-            console.error('Error fetching user:', error)
-            return null
+            console.error('Error fetching user:', error);
+            return null;
         }
-        return data
+        return data;
     },
     createUser: async (user) => {
         //TODO: pendiente por implementar
@@ -43,7 +43,8 @@ const User = {
     },
     updateUser: (id, updatedUser) => {
         //TODO: pendiente por implementar
-        // Pendiente para cuando estefania tenga la configuracion, explicar como eliminar un usuario.
+        // ? Alan mi amor
+        // Pendiente para cuando  tenga la configuracion, explicar como eliminar un usuario.
         const index = users.findIndex(user => user.id === id);
         if (index !== -1) {
             users[index] = { ...users[index], ...updatedUser };

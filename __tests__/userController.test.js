@@ -25,18 +25,17 @@ app.delete(publicRoute + '/users/:id', userController.deleteUser);
 
 const mockUsers = [
     {
-        id: 1,
-        "name": "sebastian",
-        "last_name": "Rey",
-        "username": "admin",
-        email: "reyseb@correo.com",
-        "role": 1,
+        "created_at": "2024-10-14T00:51:36+00:00",
         "created_by": "dude",
-        "created_at": "2024-10-14T00:51:36+00:00"
+        "email": "reyseb@correo.com",
+        "id": 1,
+        "last_name": "Rey",
+        "name": "sebastian",
+        "role": 1,
+        "username": "admin"
     },
-    { id: 1, name: 'John Doe', email: 'john@example.com' },
-    { id: 2, name: 'Jane Doe', email: 'jane@example.com' }
 ];
+
 const dontFounUserResponse = { message: 'Usuario no encontrado' };
 
 describe('User controllers', () => {
