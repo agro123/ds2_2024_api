@@ -3,7 +3,6 @@ import User from '../models/userModel';
 // Obtener todos los usuarios
 const getUsers = async (req, res) => {
     const users = await User.getAllUsers();
-    console.log(users);
     res.json(users);
 };
 

@@ -1,13 +1,18 @@
 import { Router } from 'express';
 import userController from '../controllers/userController';
+import pqrsController from '../controllers/pqrsController';
 
 const router = Router();
 
 // Users
-router.get('/users/', userController.getUsers);       // Obtener todos los usuarios
-router.get('/users/:id', userController.getUser);    // Obtener un usuario por ID
-router.post('/users/', userController.createUser);    // Crear un nuevo usuario
-router.put('/users/:id', userController.updateUser); // Actualizar un usuario existente
-router.delete('/users/:id', userController.deleteUser); // Eliminar un usuario
+router.get('/users/', userController.getUsers);          // Obtener todos los usuarios
+router.get('/users/:id', userController.getUser);        // Obtener un usuario por ID
+router.post('/users/', userController.createUser);       // Crear un nuevo usuario
+router.put('/users/:id', userController.updateUser);     // Actualizar un usuario existente
+router.delete('/users/:id', userController.deleteUser);  // Eliminar un usuario
+
+//PQRSD
+router.get('/pqrsd/', pqrsController.getPqrds);          // Obtener todos los usuarios
+
 
 export default router;
