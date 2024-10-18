@@ -7,6 +7,7 @@ const config = {
             statements: 60,
         },
     },
+    setupFiles: ['<rootDir>/jest.setup.js'],  // Cargar el archivo de setup
 };
 
 module.exports = config;

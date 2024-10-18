@@ -8,8 +8,8 @@ const getUsers = async (req, res) => {
 };
 
 // Obtener un usuario por ID
-const getUser = (req, res) => {
-    const user = User.getUserById(parseInt(req.params.id));
+const getUser = async (req, res) => {
+    const user = await User.getUserById(parseInt(req.params.id));
     if (user) {
         res.json(user);
     } else {
