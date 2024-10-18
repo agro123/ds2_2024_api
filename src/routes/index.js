@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userController from '../controllers/userController';
+import pqrsController from '../controllers/pqrsController';
 
 const router = Router();
 
@@ -11,8 +12,7 @@ router.put('/users/:id', userController.updateUser);     // Actualizar un usuari
 router.delete('/users/:id', userController.deleteUser);  // Eliminar un usuario
 
 //PQRSD
-router.get('/pqrsd/', userController.getUsers);          // Obtener todos los usuarios
-router.get('/pqrsd/:id', userController.getUser);        // Obtener un usuario por ID
-router.post('/pqrsd/', userController.createUser);       
+router.get('/pqrsd/', pqrsController.getPqrds);          // Obtener todos los usuarios
+
 
 export default router;
