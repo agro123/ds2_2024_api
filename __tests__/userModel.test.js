@@ -104,6 +104,51 @@ describe("User Model", () => {
         expect(result).toBeNull();
     });
 
+    
+    test("createUser should create a new user", async () => {
+        const createUser = {
+            name: "Kevin",
+            last_name: "Aristizabal",
+            email: "karistizabal307@gmail.com",
+            role: 1,
+            username: "kev405",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+
+        expect(typeof createUser.created_by).toBe('string');
+        expect(typeof createUser.email).toBe('string' || 'NULL');
+        expect(typeof createUser.last_name).toBe('string');
+        expect(typeof createUser.name).toBe('string');
+        expect(typeof createUser.role).toBe('number');
+        expect(typeof createUser.username).toBe('string');
+        expect(typeof createUser.password).toBe('string');
+      
+        const result = await UserModel.createUser(createUser);
+        
+        expect(typeof result.success).toBe('boolean');
+        expect(typeof result.data).toBe('object');
+    });
+
+    test("updateUser should handle unexpected errors", async () => {
+        const createUser = {
+            name: "Kevin",
+            last_name: 18,
+            email: "karistizabal307@gmail.com",
+            role: 1,
+            username: "kev405",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+      
+        try {
+          await UserModel.createUser(createUser);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error.message).toBe('string');
+        }
+    });
+
     test("updateUser should update an existing user", async () => {
         const updatedUser = {
             name: "Alan",
