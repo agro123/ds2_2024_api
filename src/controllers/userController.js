@@ -24,13 +24,14 @@ const createUser = async (req, res) => {
 };
 
 // Actualizar un usuario existente
-const updateUser = (req, res) => {
-    const updatedUser = User.updateUser(parseInt(req.params.id), req.body);
-    if (updatedUser) {
-        res.json(updatedUser);
-    } else {
-        res.status(404).json({ message: 'Usuario no encontrado' });
+const updateUser = async (req, res) => {
+    const updatedUserResult = await User.updateUser(parseInt(req.params.id), req.body);
+    
+    if (!updatedUserResult.success) {
+        res.status(400).json({ message: updatedUserResult.message });
     }
+    
+    res.status(200).json(updatedUserResult.data);
 };
 
 // Eliminar un usuario
