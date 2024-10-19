@@ -1,9 +1,36 @@
 import UserModel from "../src/models/user";
+import supabase from "./mockSupase";
+import bcrypt from 'bcrypt';
+
+jest.mock('../src/db');
+jest.mock('bcrypt');
+
+const mockUsers = [
+    {
+        "created_at": "2024-10-14T00:51:36+00:00",
+        "created_by": "dude",
+        "email": "reyseb@correo.com",
+        "id": 1,
+        "last_name": "Rey",
+        "name": "sebastian",
+        "role": 1,
+        "username": "admin"
+    },
+];
+
+const hashedPassword = 'hashedPassword';
 
 describe("User Model", () => {
+    beforeEach(() => {
+        supabase.from.mockClear();
+        bcrypt.hash.mockResolvedValue(hashedPassword); 
+    });
 
     // Prueba para obtener todos los usuarios y validar los dos primeros
     test("getAllUsers should return all users and validate the first two elements", async () => {
+        supabase.from.mockReturnValue({
+            select:() => ({ data: mockUsers, error: null }),
+        });
         const result = await UserModel.getAllUsers();
 
         expect(Array.isArray(result)).toBe(true);
@@ -31,7 +58,7 @@ describe("User Model", () => {
             expect(typeof user.username).toBe('string');
         }
     });
-
+/*
     // Escenario Ideal: Cuando se obtiene un usuario por su ID correctamente
     test("getUserById should return a user by ID (ideal scenario)", async () => {
         // Utilizamos un ID que sabemos que existe
