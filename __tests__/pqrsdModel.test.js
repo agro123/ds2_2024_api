@@ -1,10 +1,10 @@
-import pqrsdModel, { pqrss } from "../src/models/pqrsdModel";
+import PqrsdModel from "../src/models/pqrsd";
 
 describe("PQRSD Model", () => {
 
 
     test("getAllpqrss should return all pqrss and validate the first two elements", async () => {
-        const result = await pqrsdModel.getAllPQRSDs();
+        const result = await PqrsdModel.getAllPQRSDs();
 
         expect(Array.isArray(result)).toBe(true);
 

@@ -1,4 +1,4 @@
-import Pqrsd from '../models/pqrsdModel';
+import Pqrsd from '../models/pqrsd';
 
 
 const getPqrds = async (req, res) => {

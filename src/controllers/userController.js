@@ -1,4 +1,4 @@
-import User from '../models/userModel';
+import User from '../models/user';
 
 
 // Obtener todos los usuarios
@@ -26,11 +26,11 @@ const createUser = async (req, res) => {
 // Actualizar un usuario existente
 const updateUser = async (req, res) => {
     const updatedUserResult = await User.updateUser(parseInt(req.params.id), req.body);
-    
+
     if (!updatedUserResult.success) {
-        res.status(400).json({ message: updatedUserResult.message });
+        res.status(404).json({ message: updatedUserResult.message });
     }
-    
+
     res.status(200).json(updatedUserResult.data);
 };
 
@@ -46,10 +46,10 @@ const deleteUser = (req, res) => {
 
 const loginUser = async (req, res) => {
     const { username, password } = req.body;
-    
+
     // Llamamos al método loginUser del modelo
     const user = await User.loginUser(username, password);
-    
+
     // Si hay un error en la autenticación
     if (user.error) {
         return res.status(401).json({ message: user.error }); // 401 Unauthorized

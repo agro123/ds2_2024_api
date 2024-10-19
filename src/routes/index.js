@@ -13,7 +13,7 @@ router.delete('/users/:id', userController.deleteUser);  // Eliminar un usuario
 router.post('/users/login/', userController.loginUser);  // login de usuarios
 
 //PQRSD
-router.get('/pqrsd/', pqrsController.getPqrds);          // Obtener todos los usuarios
+router.get('/pqrsd/', pqrsController.getPqrds);          // Obtener todas las PQRS
 
 
 export default router;
