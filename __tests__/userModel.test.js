@@ -103,7 +103,7 @@ describe("User Model", () => {
         expect(typeof result.data).toBe('object');
     });
 
-    test("updateUser should handle unexpected errors", async () => {
+    test("createUser should handle unexpected errors", async () => {
         const createUser = {
             name: "Kevin",
             last_name: 18,
