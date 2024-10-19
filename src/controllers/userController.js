@@ -1,5 +1,6 @@
 import User from '../models/userModel';
 
+
 // Obtener todos los usuarios
 const getUsers = async (req, res) => {
     const users = await User.getAllUsers();
@@ -42,10 +43,25 @@ const deleteUser = (req, res) => {
     }
 };
 
+const loginUser = async (req, res) => {
+    const { username, password } = req.body;
+    
+    // Llamamos al método loginUser del modelo
+    const user = await User.loginUser(username, password);
+    
+    // Si hay un error en la autenticación
+    if (user.error) {
+        return res.status(401).json({ message: user.error }); // 401 Unauthorized
+    }
+
+    // Si la autenticación es exitosa, retorna la información del usuario
+    res.json(user);
+};
 export default {
     getUsers,
     getUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser
 };
