@@ -77,6 +77,85 @@ describe("User Model", () => {
         expect(result).toBeNull();
     });
 
+    test("updateUser should update an existing user", async () => {
+        const updatedUser = {
+            name: "Alan",
+            last_name: "Lame",
+            email: "alan@gmail.com",
+            role: 1,
+            username: "omation",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+      
+        const result = await userModel.updateUser(17, updatedUser);
+        
+        expect(typeof result.success).toBe('boolean');
+        expect(typeof result.data).toBe('object');
+    });
+
+    test("updateUser should return null if the user does not exist", async () => {
+        const updatedUser = {
+            name: "Alan",
+            last_name: "Lame",
+            email: "alan@gmail.com",
+            role: 1,
+            username: "omation",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+      
+        const result = await userModel.updateUser(999, updatedUser);
+
+        expect(typeof result.success).toBe('boolean');
+        expect(typeof result.message).toBe('undefined');
+    });
+
+    test("updateUser should return null if the ID provided is invalid", async () => {
+        const updatedUser = {
+            name: "Alan",
+            last_name: "Lame",
+            email: "alan@gmail.com",
+            role: 1,
+            username: "omation",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+      
+        let result = await userModel.updateUser(null, updatedUser);
+        expect(typeof result.success).toBe('boolean');
+        expect(typeof result.message).toBe('string');
+      
+        result = await userModel.updateUser(undefined, updatedUser);
+        expect(typeof result.success).toBe('boolean');
+        expect(typeof result.message).toBe('string');
+    });
+
+    test("updateUser should return null if no update data is provided", async () => {
+        const result = await userModel.updateUser(1, {});
+        expect(typeof result.success).toBe('boolean');
+        expect(typeof result.message).toBe('string');
+    });
+
+    test("updateUser should handle unexpected errors", async () => {
+        const updatedUser = {
+            name: "Alan",
+            last_name: "Lame",
+            email: "alan@gmail.com",
+            role: 1,
+            username: "omation",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+      
+        try {
+          await userModel.updateUser(17, updatedUser);
+        } catch (error) {
+          expect(error).toBeInstanceOf(Error);
+          expect(error.message).toBe("Unexpected error");
+        }
+    });
+
     // Puedes habilitar las siguientes pruebas cuando sea necesario
     /*
     test("createUser should create a new user", () => {

@@ -67,16 +67,47 @@ const User = {
             return error;
         }
     },
-    updateUser: (id, updatedUser) => {
-        //TODO: pendiente por implementar
-        // ? Alan mi amor
-        // Pendiente para cuando  tenga la configuracion, explicar como eliminar un usuario.
-        const index = users.findIndex(user => user.id === id);
-        if (index !== -1) {
-            users[index] = { ...users[index], ...updatedUser };
-            return users[index];
+    updateUser: async (userId, userData) => {
+        if (
+            typeof userData === typeof undefined ||
+            (Array.isArray(userData) && userData.length === 0) ||
+            (typeof userData === 'object' && Object.keys(userData).length === 0)
+        ) {
+            return {
+                success: false,
+                message: 'Valores del usuario no enviados.',
+            };
         }
-        return null;
+
+        const saltRounds = 10; // Rondas de sal para encriptar la contraseña
+
+        try {
+            const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+            
+            userData.password = hashedPassword
+
+            const { error } = await supabase
+                .from('users')
+                .update(userData)  // Pasa los nuevos datos
+                .eq('id', userId); // Filtro por id (ajusta según el campo que necesites)
+
+            if (error) {
+                return {
+                    success: false,
+                    message: error.message,
+                };
+            }
+
+            return {
+                success: true,
+                data: userData
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error al encriptar la contraseña',
+            };
+        }
     },
     deleteUser: (id) => {
         //TODO: pendiente por implementar
