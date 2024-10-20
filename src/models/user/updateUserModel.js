@@ -1,5 +1,7 @@
 import supabase from '../../db';
 import bcrypt from 'bcrypt';
+import User from '.';
+
 
 const saltRounds = 10; // Rondas de sal para encriptar la contraseña
 
@@ -8,10 +10,14 @@ const validateUserData = (userData) => {
 };
 
 const encryptPasswordIfPresent = async (userData) => {
+    let password = userData.password;
     if (userData.password) {
-        userData.password = await bcrypt.hash(userData.password, saltRounds);
+        password = await bcrypt.hash(password, saltRounds).catch(() => {
+            console.error('error aqui');
+        });
     }
-    return userData;
+    
+    return { ...userData, password };
 };
 
 const updateUserInDatabase = async (userId, userData) => {
@@ -19,33 +25,35 @@ const updateUserInDatabase = async (userId, userData) => {
         .from('users')
         .update(userData)
         .eq('id', userId);
-    return error;
+
+    if (error) {
+        return {
+            success: false,
+            error: error.message,
+        };
+    }
+
+    return {
+        success: true,
+        data: userData,
+    };
 };
 
 const updateUser = async (userId, userData) => {
     try {
-        const userExist = await User.getUserById(userId);
-        if (validateUserData(userData) || !userExist) {
-            return {
-                success: false,
-                message: 'User data is invalid or user does not exist.',
-            };
-        }
+    const userExist = true;//await User.getUserById(userId);
 
-        const updatedUserData = await encryptPasswordIfPresent(userData);
-        const error = await updateUserInDatabase(userId, updatedUserData);
-
-        if (error) {
-            return {
-                success: false,
-                message: error.message,
-            };
-        }
-
+    if (validateUserData(userData) || !userExist) {
         return {
-            success: true,
-            data: updatedUserData,
+            success: false,
+            message: 'User data is invalid or user does not exist.',
         };
+    }
+
+    const updatedUserData = await encryptPasswordIfPresent(userData);
+    const updateResult = await updateUserInDatabase(userId, updatedUserData);
+
+    return updateResult;
     } catch (error) {
         return {
             success: false,

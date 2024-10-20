@@ -29,7 +29,6 @@ const updateUser = async (req, res) => {
     if (!updatedUserResult.success) {
         res.status(404).json({ message: updatedUserResult.message });
     }
-
     res.status(200).json(updatedUserResult.data);
 };
 
