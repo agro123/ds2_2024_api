@@ -23,7 +23,10 @@ const createUser = async (user) => {
             console.error('Error al crear el usuario:', error);
             return error;
         }
-        return data;
+        return {
+            success: true,
+            data: data,
+        };
     } catch (error) {
         console.error('Error al encriptar la contraseña:', error);
         return error;

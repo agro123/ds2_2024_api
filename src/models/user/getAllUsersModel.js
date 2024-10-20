@@ -10,4 +10,4 @@ const getAllUsers = async () => {
     return data;
 };
 
-export default getAllUsers;
+export default getAllUsers; 
