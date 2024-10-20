@@ -62,7 +62,7 @@ describe('User controllers', () => {
     test('GET /api/public/users/:id - should return 404 if user does not exist', async () => {
         userModel.getUserById.mockResolvedValue(null);
 
-        const response = await request(app).get(publicRoute + '/users/-1');
+        const response = await request(app).get(publicRoute + '/users/35');
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual(dontFounUserResponse);
     });
@@ -79,17 +79,39 @@ describe('User controllers', () => {
 
     //--------------------------------- PUT
     test('PUT /api/public/users/:id should update a user', async () => {
-        const updatedUser = { name: 'John Updated', email: 'john.updated@example.com' };
-        userModel.updateUser.mockReturnValue({ id: 1, ...updatedUser });
+        const updatedUser = {
+            name: "Alan",
+            last_name: "Lame",
+            email: "alan@gmail.com",
+            role: 1,
+            username: "omation",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+        userModel.updateUser.mockReturnValue({success: true, data: updatedUser});
 
-        const response = await request(app).put(publicRoute + '/users/1').send(updatedUser);
+        const response = await request(app).put(publicRoute + '/users/17').send(updatedUser);
+
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({ id: 1, ...updatedUser });
+        expect(response.body).toEqual(
+            {
+                name: "Alan",
+                last_name: "Lame",
+                email: "alan@gmail.com",
+                role: 1,
+                username: "omation",
+                created_by: "Sebastian Rey",
+                password: "123456"
+            }
+        );
     });
 
     test('PUT /api/public/users/:id - should return 404 if user do not exist', async () => {
         const updatedUser = { name: 'John Updated', email: 'john.updated@example.com' };
-        userModel.updateUser.mockReturnValue(null);
+        userModel.updateUser.mockReturnValue({
+            success: false,
+            message: 'Usuario no encontrado',
+        });
         const response = await request(app).put(publicRoute + '/users/17').send(updatedUser);
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual(dontFounUserResponse);

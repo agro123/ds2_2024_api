@@ -26,11 +26,9 @@ const createUser = async (req, res) => {
 // Actualizar un usuario existente
 const updateUser = async (req, res) => {
     const updatedUserResult = await User.updateUser(parseInt(req.params.id), req.body);
-
     if (!updatedUserResult.success) {
         res.status(404).json({ message: updatedUserResult.message });
     }
-
     res.status(200).json(updatedUserResult.data);
 };
 
