@@ -2,8 +2,9 @@ import Pqrsd from '../models/pqrsd';
 
 
 const getPqrds = async (req, res) => {
-    const users = await Pqrsd.getAllPQRSDs();
-    res.json(users);
+    const pqrs = await Pqrsd.getAllPQRSDs();
+    res.json(pqrs);
+
 };
 
 // Crear nueva Pqrsd
