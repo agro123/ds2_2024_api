@@ -78,10 +78,10 @@ describe("PQRSD Controller", () => {
         expect(response.body).toEqual(mockPqrds);
     });
 
-    // // Nueva prueba para manejar el error en el método GET
+    // Nueva prueba para manejar el error en el método GET
     // test('GET /api/public/pqrsd should return 500 if getting PQRSDs fails', async () => {
     //     const errorMessage = 'Error al obtener PQRSDs';
-    //     PqrsdModel.getAllPQRSDs.mockRejectedValue(new Error(errorMessage)); // Simular fallo
+    //     PqrsdModel.getAllPQRSDs.mockRejectedValue(null); // Simular fallo
 
     //     // Enviar solicitud GET para obtener la lista de PQRSDs
     //     const response = await request(app)
