@@ -110,43 +110,58 @@ describe("User Model", () => {
     });
 
     // Escenario Ideal: Cuando se obtiene un usuario por su ID correctamente
-    /* test("getUserById should return a user by ID (ideal scenario)", async () => {
-         // Utilizamos un ID que sabemos que existe
-         supabase.from().single.mockResolvedValue({data: mockUsers[0], error: null});
-         const result = await UserModel.getUserById(1);
- 
-         expect(result).toHaveProperty("id", 1);
-         expect(result).toHaveProperty("created_at");
-         expect(result).toHaveProperty("created_by");
-         expect(result).toHaveProperty("id");
-         expect(result).toHaveProperty("email");
-         expect(result).toHaveProperty("last_name");
-         expect(result).toHaveProperty("name");
-         expect(result).toHaveProperty("role");
-         expect(result).toHaveProperty("username");
- 
-         expect(typeof result.created_at).toBe('string');
-         expect(typeof result.created_by).toBe('string');
-         expect(typeof result.id).toBe('number');
-         expect(typeof result.email).toBe('string' || 'NULL');
-         expect(typeof result.last_name).toBe('string');
-         expect(typeof result.name).toBe('string');
-         expect(typeof result.role).toBe('number');
-         expect(typeof result.username).toBe('string');
-     });*/
+    test("getUserById should return a user by ID (ideal scenario)", async () => {
+        // Mockear la respuesta de Supabase cuando el usuario existe
+        supabase.from.mockReturnValue({
+            select: jest.fn().mockReturnThis(),
+            eq: jest.fn().mockReturnThis(),
+            single: jest.fn().mockResolvedValue({ data: mockUsers[0], error: null })
+        });
 
+        const result = await UserModel.getUserById(1);
 
-    /*
+        expect(result).toHaveProperty("id", 1);
+        expect(result).toHaveProperty("created_at");
+        expect(result).toHaveProperty("created_by");
+        expect(result).toHaveProperty("email");
+        expect(result).toHaveProperty("last_name");
+        expect(result).toHaveProperty("name");
+        expect(result).toHaveProperty("role");
+        expect(result).toHaveProperty("username");
+
+        // Validaciones de tipo
+        expect(typeof result.created_at).toBe('string');
+        expect(typeof result.created_by).toBe('string');
+        expect(typeof result.id).toBe('number');
+        expect(typeof result.email).toBe('string' || 'NULL');
+        expect(typeof result.last_name).toBe('string');
+        expect(typeof result.name).toBe('string');
+        expect(typeof result.role).toBe('number');
+        expect(typeof result.username).toBe('string');
+    });
+
     // Escenario de Error: Cuando el usuario no existe
     test("getUserById should return null if the user does not exist", async () => {
-        // Utilizamos un ID que sabemos que no existe
-        const result = await UserModel.getUserById(-1);
+        // Mockear la respuesta de Supabase cuando el usuario no existe
+        supabase.from.mockReturnValue({
+            select: jest.fn().mockReturnThis(),
+            eq: jest.fn().mockReturnThis(),
+            single: jest.fn().mockResolvedValue({ data: null, error: { message: 'Not found' } })
+        });
 
+        const result = await UserModel.getUserById(-1);
         expect(result).toBeNull();
     });
 
     // Escenario de Entrada Inválida: Cuando el ID proporcionado no es válido
     test("getUserById should return null if the ID provided is invalid", async () => {
+        // Mockear la respuesta de Supabase cuando se pasa un ID inválido
+        supabase.from.mockReturnValue({
+            select: jest.fn().mockReturnThis(),
+            eq: jest.fn().mockReturnThis(),
+            single: jest.fn().mockResolvedValue({ data: null, error: { message: 'Invalid ID' } })
+        });
+
         let result = await UserModel.getUserById(null);
         expect(result).toBeNull();
 
@@ -157,51 +172,63 @@ describe("User Model", () => {
         expect(result).toBeNull();
     });
 
-    */
+    test('CreateUser should hash the user password and insert the user into the database', async () => {
+        // Simular bcrypt.hash
+        const hashedPassword = 'hashed_password';
+        bcrypt.hash.mockResolvedValueOnce(hashedPassword);
 
-    // test("createUser should create a new user", async () => {
-    //     const createUser = {
-    //         name: "Kevin",
-    //         last_name: "Aristizabal",
-    //         email: "karistizabal307@gmail.com",
-    //         role: 1,
-    //         username: "kev405",
-    //         created_by: "Sebastian Rey",
-    //         password: "123456"
-    //     };
-    //     supabase.from().insert.mockResolvedValue({ data: [createUser], error: null });
+        // Simular supabase.from().insert().select() para devolver datos sin errores
+        const mockInsertResponse = {
+            data: [{ id: 1, ...mockUsersCreate, password: hashedPassword }],
+            error: null,
+        };
+        supabase.from.mockReturnValueOnce({
+            insert: jest.fn().mockReturnThis(),
+            select: jest.fn().mockResolvedValueOnce(mockInsertResponse),
+        });
 
-    //     expect(typeof createUser.created_by).toBe('string');
-    //     expect(typeof createUser.email).toBe('string' || 'NULL');
-    //     expect(typeof createUser.last_name).toBe('string');
-    //     expect(typeof createUser.name).toBe('string');
-    //     expect(typeof createUser.role).toBe('number');
-    //     expect(typeof createUser.username).toBe('string');
-    //     expect(typeof createUser.password).toBe('string');
+        const response = await UserModel.createUser(mockUsersCreate);
 
-    //     const result = await UserModel.createUser(createUser);
+        // Verificar que bcrypt.hash haya sido llamado con la contraseña correcta
+        expect(bcrypt.hash).toHaveBeenCalledWith(mockUsersCreate.password, 10);
+        // Verificar que supabase haya insertado el usuario con la contraseña encriptada
+        expect(supabase.from).toHaveBeenCalledWith('users');
+        expect(response).toEqual({
+            success: true,
+            data: mockInsertResponse.data,
+        });
+    });
 
-    //     expect(typeof result.data).toBe('object');
-    // });
+    test('CreateUser should return an error if bcrypt hashing fails', async () => {
+        // Simular fallo en bcrypt.hash
+        const hashError = new Error('Hashing failed');
+        bcrypt.hash.mockRejectedValueOnce(hashError);
 
-    // test("createUser should handle unexpected errors", async () => {
-    //     const createUser = {
-    //         name: "Kevin",
-    //         last_name: 18,
-    //         email: "karistizabal307@gmail.com",
-    //         role: 1,
-    //         username: "kev405",
-    //         created_by: "Sebastian Rey",
-    //         password: "123456"
-    //     };
-    //     supabase.from().insert.mockResolvedValue({ sucess: true, data: mockUsersCreate, error: null });
-    //     try {
-    //         await UserModel.createUser(createUser);
-    //     } catch (error) {
-    //         expect(error).toBeInstanceOf(Error);
-    //         expect(error.message).toBe('string');
-    //     }
-    // });
+        const response = await UserModel.createUser(mockUsersCreate);
+
+        // Verificar que se haya registrado el error
+        expect(bcrypt.hash).toHaveBeenCalledWith(mockUsersCreate.password, 10);
+        expect(response).toBe(hashError);
+    });
+
+    test('CreateUser should return an error if database insertion fails', async () => {
+        // Simular bcrypt.hash exitoso
+        const hashedPassword = 'hashed_password';
+        bcrypt.hash.mockResolvedValueOnce(hashedPassword);
+
+        // Simular error en la base de datos
+        const dbError = { message: 'Database insertion failed' };
+        supabase.from.mockReturnValueOnce({
+            insert: jest.fn().mockReturnThis(),
+            select: jest.fn().mockResolvedValueOnce({ data: null, error: dbError }),
+        });
+
+        const response = await UserModel.createUser(mockUsersCreate);
+
+        // Verificar que supabase haya sido llamada correctamente
+        expect(supabase.from).toHaveBeenCalledWith('users');
+        expect(response).toBe(dbError);
+    });
 
     test("updateUser should update an existing user", async () => {
         const updatedUser = {
@@ -303,35 +330,5 @@ describe("User Model", () => {
             });
         });
     });
-    // Puedes habilitar las siguientes pruebas cuando sea necesario
-    /*
-    test("createUser should create a new user", () => {
-        const newUser = { name: "Mark Smith", email: "mark@example.com" };
-        const result = UserModel.createUser(newUser);
-        expect(result).toHaveProperty("id", 3);
-        expect(result).toHaveProperty("name", "Mark Smith");
-        expect(result).toHaveProperty("email", "mark@example.com");
-    });
-
-    test("updateUser should update an existing user", () => {
-        const updatedUser = { name: "John Smith" };
-        const result = UserModel.updateUser(1, updatedUser);
-        expect(result).toHaveProperty("name", "John Smith");
-    });
-
-
-    /*
-    
-    test("deleteUser should delete a user by ID", () => {
-        const result = UserModel.deleteUser(1);
-        expect(result).toHaveProperty("id", 1);
-        expect(users.length).toBe(2);
-    });
-
-    test("deleteUser should return null if the user does not exist", () => {
-        const result = UserModel.deleteUser(-1);
-        expect(result).toBeNull();
-    });
-    */
 
 });
