@@ -1,4 +1,7 @@
 import UserModel from "../src/models/user";
+import supabase from "../src/db"; 
+
+jest.mock("../src/db");
 
 describe("User Model", () => {
 
@@ -155,7 +158,29 @@ describe("User Model", () => {
             expect(error.message).toBe("Unexpected error");
         }
     });
+    
+    describe("deleteUser", () => {
+        
+        test("deleteUser should return error if the user ID is invalid", async () => {
+            const result = await UserModel.deleteUser('invalidID');
 
+            expect(result).toEqual({
+                success: false,
+                message: 'Invalid user ID.',
+            });
+        });
+
+        test("deleteUser should handle unexpected errors", async () => {
+            UserModel.getUserById = jest.fn().mockRejectedValueOnce(new Error("Unexpected error"));
+
+            const result = await UserModel.deleteUser(1);
+
+            expect(result).toEqual({
+                success: false,
+                message: 'Error while processing the request.',
+            });
+        });
+    });
     // Puedes habilitar las siguientes pruebas cuando sea necesario
     /*
     test("createUser should create a new user", () => {
