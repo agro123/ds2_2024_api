@@ -2,3 +2,4 @@ node_modules
 dist
 coverage
 .sonar
+package-lock.json

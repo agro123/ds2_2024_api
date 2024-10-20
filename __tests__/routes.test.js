@@ -18,7 +18,10 @@ describe('Routes', () => {
       { method: 'get', path: '/users/:id' },
       { method: 'post', path: '/users/' },
       { method: 'put', path: '/users/:id' },
-      { method: 'delete', path: '/users/:id' }
+      { method: 'delete', path: '/users/:id' },
+      { method: 'post', path: '/users/login/' },
+      { method: 'get', path: '/pqrsd/' },
+      { method: 'post', path: '/pqrsd/' },
     ]);
   });
 });
