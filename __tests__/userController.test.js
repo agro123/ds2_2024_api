@@ -2,12 +2,12 @@ import request from 'supertest';
 import express from 'express';
 
 import userController from '../src/controllers/userController';
-import userModel from '../src/models/userModel';
+import userModel from '../src/models/user';
 
 const app = express();
 app.use(express.json());
 
-jest.mock('../src/models/userModel');
+jest.mock('../src/models/user');
 
 const publicRoute = '/api/public';
 
@@ -16,11 +16,21 @@ app.get(publicRoute + '/users/:id', userController.getUser);
 app.post(publicRoute + '/users', userController.createUser);
 app.put(publicRoute + '/users/:id', userController.updateUser);
 app.delete(publicRoute + '/users/:id', userController.deleteUser);
+app.post(publicRoute + '/login', userController.loginUser);
 
 const mockUsers = [
-    { id: 1, name: 'John Doe', email: 'john@example.com' },
-    { id: 2, name: 'Jane Doe', email: 'jane@example.com' }
+    {
+        "created_at": "2024-10-14T00:51:36+00:00",
+        "created_by": "dude",
+        "email": "reyseb@correo.com",
+        "id": 1,
+        "last_name": "Rey",
+        "name": "sebastian",
+        "role": 1,
+        "username": "admin"
+    },
 ];
+
 const dontFounUserResponse = { message: 'Usuario no encontrado' };
 
 describe('User controllers', () => {
@@ -30,6 +40,7 @@ describe('User controllers', () => {
         userModel.createUser.mockClear();
         userModel.updateUser.mockClear();
         userModel.deleteUser.mockClear();
+        userModel.loginUser.mockClear();
     });
 
     //--------------------------------- GET
@@ -42,15 +53,17 @@ describe('User controllers', () => {
     });
 
     test('GET /api/public/users/:id should return a single user', async () => {
-        userModel.getUserById.mockReturnValue(mockUsers[0]);
+        userModel.getUserById.mockResolvedValue(mockUsers[0]);
+
         const response = await request(app).get(publicRoute + '/users/1');
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual(mockUsers[0]);
     });
 
-    test('GET /api/public/users/:id - should return 404 if user do not exist', async () => {
-        userModel.getUserById.mockReturnValue(null);
-        const response = await request(app).get(publicRoute + '/users/-1');
+    test('GET /api/public/users/:id - should return 404 if user does not exist', async () => {
+        userModel.getUserById.mockResolvedValue(null);
+
+        const response = await request(app).get(publicRoute + '/users/35');
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual(dontFounUserResponse);
     });
@@ -67,18 +80,30 @@ describe('User controllers', () => {
 
     //--------------------------------- PUT
     test('PUT /api/public/users/:id should update a user', async () => {
-        const updatedUser = { name: 'John Updated', email: 'john.updated@example.com' };
-        userModel.updateUser.mockReturnValue({ id: 1, ...updatedUser });
+        const updatedUser = {
+            name: "Alan",
+            last_name: "Lame",
+            email: "alan@gmail.com",
+            role: 1,
+            username: "omation",
+            created_by: "Sebastian Rey",
+            password: "123456"
+        };
+        userModel.updateUser.mockReturnValue({ success: true, data: updatedUser });
 
-        const response = await request(app).put(publicRoute + '/users/1').send(updatedUser);
+        const response = await request(app).put(publicRoute + '/users/17').send(updatedUser);
+
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({ id: 1, ...updatedUser });
+        expect(response.body).toEqual(updatedUser);
     });
 
-    test('PUT /api/public/users/:id - should return 404 if user do not exist', async () => {
+    test('PUT /api/public/users/:id - should return 404 if user does not exist', async () => {
         const updatedUser = { name: 'John Updated', email: 'john.updated@example.com' };
-        userModel.updateUser.mockReturnValue(null);
-        const response = await request(app).put(publicRoute + '/users/-1').send(updatedUser);
+        userModel.updateUser.mockReturnValue({
+            success: false,
+            message: 'Usuario no encontrado',
+        });
+        const response = await request(app).put(publicRoute + '/users/17').send(updatedUser);
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual(dontFounUserResponse);
     });
@@ -88,15 +113,55 @@ describe('User controllers', () => {
         const deletedUser = { name: 'John Updated', email: 'john.updated@example.com' };
         userModel.deleteUser.mockReturnValue({ id: 1, ...deletedUser });
 
-        const response = await request(app).delete(publicRoute + '/users/1').send(deletedUser);
+        const response = await request(app).delete(publicRoute + '/users/1');
         expect(response.statusCode).toBe(200);
         expect(response.body).toEqual({ id: 1, ...deletedUser });
     });
 
-    test('DELETE /api/public/users/:id - should return 404 if user do not exist', async () => {
+    test('DELETE /api/public/users/:id - should return 404 if user does not exist', async () => {
         userModel.deleteUser.mockReturnValue(null);
-        const response = await request(app).delete('/api/public/users/-1');
+        const response = await request(app).delete(publicRoute + '/users/35');
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual(dontFounUserResponse);
+    });
+
+    //--------------------------------- LOGIN
+    test('POST /api/public/login should return user data on successful login', async () => {
+        const mockLoginResponse = {
+            id: 1,
+            username: 'admin',
+            email: 'admin@example.com',
+            role: 1,
+        };
+
+        const loginData = {
+            username: 'admin',
+            password: 'password123'
+        };
+
+        userModel.loginUser.mockResolvedValue(mockLoginResponse);
+
+        const response = await request(app)
+            .post(publicRoute + '/login')
+            .send(loginData);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual(mockLoginResponse);
+    });
+
+    test('POST /api/public/login should return 401 on failed login', async () => {
+        const loginData = {
+            username: 'admin',
+            password: 'wrongpassword'
+        };
+
+        userModel.loginUser.mockResolvedValue({ error: 'Invalid credentials' });
+
+        const response = await request(app)
+            .post(publicRoute + '/login')
+            .send(loginData);
+
+        expect(response.statusCode).toBe(401);
+        expect(response.body).toEqual({ message: 'Invalid credentials' });
     });
 });

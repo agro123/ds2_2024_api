@@ -1,5 +1,7 @@
-import User from './userModel';
+import UserModel from './user';
+import Pqrsd from './pqrsd';
 
 export default {
-    User
+    UserModel,
+    Pqrsd
 };
