@@ -280,7 +280,44 @@ describe("User Model", () => {
             expect(error.message).toBe("Unexpected error");
         }
     });
+    
+    describe("deleteUser", () => {
+        
+        test("deleteUser should return error if the user ID is invalid", async () => {
+            const result = await UserModel.deleteUser('invalidID');
 
+            expect(result).toEqual({
+                success: false,
+                message: 'Invalid user ID.',
+            });
+        });
+
+        test("deleteUser should handle unexpected errors", async () => {
+            UserModel.getUserById = jest.fn().mockRejectedValueOnce(new Error("Unexpected error"));
+
+            const result = await UserModel.deleteUser(1);
+
+            expect(result).toEqual({
+                success: false,
+                message: 'Error while processing the request.',
+            });
+        });
+    });
+    // Puedes habilitar las siguientes pruebas cuando sea necesario
+    /*
+    test("createUser should create a new user", () => {
+        const newUser = { name: "Mark Smith", email: "mark@example.com" };
+        const result = UserModel.createUser(newUser);
+        expect(result).toHaveProperty("id", 3);
+        expect(result).toHaveProperty("name", "Mark Smith");
+        expect(result).toHaveProperty("email", "mark@example.com");
+    });
+
+    test("updateUser should update an existing user", () => {
+        const updatedUser = { name: "John Smith" };
+        const result = UserModel.updateUser(1, updatedUser);
+        expect(result).toHaveProperty("name", "John Smith");
+    });
 
 
     /*
