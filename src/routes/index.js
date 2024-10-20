@@ -14,6 +14,7 @@ router.post('/users/login/', userController.loginUser);  // login de usuarios
 
 //PQRSD
 router.get('/pqrsd/', pqrsController.getPqrds);          // Obtener todas las PQRS
+router.post('/pqrsd/', pqrsController.createPqrsd);          // Crear nueva PQRS
 
 
 export default router;

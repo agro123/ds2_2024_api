@@ -21,7 +21,7 @@ describe('Routes', () => {
       { method: 'delete', path: '/users/:id' },
       { method: 'post', path: '/users/login/' },
       { method: 'get', path: '/pqrsd/' },
-
+      { method: 'post', path: '/pqrsd/' },
     ]);
   });
 });
