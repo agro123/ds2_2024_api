@@ -1,6 +1,5 @@
 import supabase from '../../db';
 import bcrypt from 'bcrypt';
-import User from '.';
 
 
 const saltRounds = 10; // Rondas de sal para encriptar la contraseña
@@ -12,9 +11,7 @@ const validateUserData = (userData) => {
 const encryptPasswordIfPresent = async (userData) => {
     let password = userData.password;
     if (userData.password) {
-        password = await bcrypt.hash(password, saltRounds).catch(() => {
-            console.error('error aqui');
-        });
+        password = await bcrypt.hash(password, saltRounds);
     }
     
     return { ...userData, password };
