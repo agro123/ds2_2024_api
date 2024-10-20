@@ -1,17 +1,69 @@
+import supabase from "../src/db";
 import PqrsdModel from "../src/models/pqrsd";
+
+// Mock completo del módulo de supabase
+jest.mock('../src/db', () => ({
+    from: jest.fn(() => ({
+        insert: jest.fn(() => ({
+            select: jest.fn()
+        }))
+    }))
+}));
 
 describe("PQRSD Model", () => {
 
+    // Limpia los mocks antes de cada prueba
+    beforeEach(() => {
+        jest.clearAllMocks();  // Limpia todos los mocks antes de cada prueba
+    });
 
+    // Test para obtener todas las PQRSD con mock
     test("getAllpqrss should return all pqrss and validate the first two elements", async () => {
+        const mockPqrsdList = [
+            {
+                id: 1,
+                first_name: 'Juan',
+                last_name: 'Pérez',
+                type_document: 1,
+                number_document: 123456789,
+                response_email: false,
+                status: 1,
+                email: 'juan.perez@example.com',
+                type_pqrsd: 1,
+                object_pqrsd: 'Solicitud de información',
+                created_at: '2024-10-19T22:43:33.815611+00:00'
+            },
+            {
+                id: 2,
+                first_name: 'Ana',
+                last_name: 'Gómez',
+                type_document: 2,
+                number_document: 987654321,
+                response_email: false,
+                status: 1,
+                email: 'ana.gomez@example.com',
+                type_pqrsd: 2,
+                object_pqrsd: 'Queja formal',
+                created_at: '2024-10-19T22:43:33.815611+00:00'
+            }
+        ];
+
+        // Mock de supabase para devolver el array simulado
+        supabase.from.mockReturnValue({
+            select: jest.fn().mockResolvedValue({
+                data: mockPqrsdList,
+                error: null
+            })
+        });
+
         const result = await PqrsdModel.getAllPQRSDs();
 
         expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBe(2);
 
         const elementsToTest = Math.min(result.length, 2);
 
         for (let i = 0; i < elementsToTest; i++) {
-
             const pqrs = result[i];
 
             expect(pqrs).toHaveProperty("id");
@@ -33,12 +85,97 @@ describe("PQRSD Model", () => {
             expect(typeof pqrs.number_document).toBe('number');
             expect(typeof pqrs.response_email).toBe('boolean');
             expect(typeof pqrs.status).toBe('number');
-            expect(typeof pqrs.email).toBe('string' || 'NULL');
+            expect(typeof pqrs.email).toBe('string');
             expect(typeof pqrs.type_pqrsd).toBe('number');
             expect(typeof pqrs.object_pqrsd).toBe('string');
             expect(typeof pqrs.created_at).toBe('string');
         }
     });
 
+    // Test para crear una nueva PQRSD con mock
+    test("createPqrsd should create a new PQRSD and return it with the correct properties", async () => {
+        const newPqrsd = {
+            first_name: 'Juan',
+            last_name: 'Pérez',
+            type_document: 1,
+            number_document: 123456789,
+            object_pqrsd: 'Solicitud de información',
+            email: 'juan.perez@example.com',
+            type_pqrsd: 1
+        };
 
+        const mockCreatedPqrsd = [
+            {
+                id: 1,
+                ...newPqrsd,
+                response_email: false,  
+                status: 1,              
+                created_at: '2024-10-19T22:43:33.815611+00:00'
+            }
+        ];
+
+        // Mock de supabase para devolver el objeto simulado
+        supabase.from.mockReturnValue({
+            insert: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({
+                    data: mockCreatedPqrsd,
+                    error: null
+                })
+            })
+        });
+
+        const result = await PqrsdModel.createPqrsd(newPqrsd);
+
+        expect(result).toEqual(mockCreatedPqrsd);
+    });
+
+    test('should return an error when createPqrsd fails', async () => {
+        const mockUser = {
+            first_name: 'Juan',
+            last_name: 'Pérez',
+            type_document: 1,
+            number_document: 123456789,
+            object_pqrsd: 'Solicitud de información',
+            email: 'juan.perez@example.com',
+            type_pqrsd: 1
+        };
+
+        // Mock de supabase para devolver un error simulado
+        supabase.from.mockReturnValue({
+            insert: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({
+                    data: null,
+                    error: 'Error de supabase'
+                })
+            })
+        });
+
+        const result = await PqrsdModel.createPqrsd(mockUser);
+        expect(result).toEqual('Error de supabase');
+    });
+
+    test('should return an unexpected error when something fails', async () => {
+        const mockUser = {
+            first_name: 'Juan',
+            last_name: 'Pérez',
+            type_document: 1,
+            number_document: 123456789,
+            object_pqrsd: 'Solicitud de información',
+            email: 'juan.perez@example.com',
+            type_pqrsd: 1
+        };
+
+        // Simulamos un fallo inesperado
+        supabase.from.mockImplementation(() => ({
+            insert: () => ({
+                select: () => Promise.reject(new Error('Unexpected error'))
+            })
+        }));
+
+        try {
+            await PqrsdModel.createPqrsd(mockUser);
+        } catch (error) {
+            expect(error.message).toEqual('Unexpected error');
+        }
+    });
 });
