@@ -1,7 +1,4 @@
 import UserModel from "../src/models/user";
-import supabase from "../src/db"; 
-
-jest.mock("../src/db");
 
 describe("User Model", () => {
 
