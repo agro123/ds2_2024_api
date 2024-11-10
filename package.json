@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon --exec npx babel-node ./src/app.js -r dotenv/config dotenv_config_path=env/dev.env",
     "prod": "nodemon --exec npx babel-node ./src/app.js -r dotenv/config dotenv_config_path=.env",
+    "vercel-build": "echo hello",
     "test": "jest",
     "lint": "eslint .",
     "test:coverage": "jest --coverage",
