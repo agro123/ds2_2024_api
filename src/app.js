@@ -12,14 +12,25 @@ dotenv.config();
 const main = async () => {
     const app = express();
     const PORT = process.env.PORT || 35001;
-    const FRONT_URL = process.env.FRONT_URL || '';
+    const FRONT_URL = process.env.FRONT_URL || 'http://127.0.0.1:5173';
+
+    app.use((req, res, next) => {
+        console.log('Origin:', req.headers.origin);
+        next();
+    });
+    
 
     app.use(json({ limit: "50mb" }));
     app.use(
         cors({
             origin: [FRONT_URL,"http://localhost:5173", "*"],
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            allowedHeaders: ['Content-Type', 'Authorization'], 
+            credentials: true, // Necesario si envías cookies o autorizaciones
         })
     );
+    // Manejar solicitudes preflight (OPTIONS)
+    app.options('*', cors());
 
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutos
