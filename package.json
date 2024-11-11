@@ -2,7 +2,7 @@
   "name": "ds2_2024_api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "nodemon --exec npx babel-node ./src/index.js -r dotenv/config dotenv_config_path=env/dev.env",
     "prod": "nodemon --exec npx babel-node ./src/index.js -r dotenv/config dotenv_config_path=.env",
