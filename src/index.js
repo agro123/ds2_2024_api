@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 //import passport from 'passport';
 import { json } from "body-parser";
-import router from "../src/routes";
+import router from "./routes";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
