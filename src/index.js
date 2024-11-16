@@ -9,7 +9,7 @@ import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
-const main = async () => {
+export const main = async () => {
     const app = express();
     const PORT = process.env.PORT || 35001;
     // Advertencia:  comentar esta linea cuando este deplegado front

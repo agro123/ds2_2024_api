@@ -2,10 +2,12 @@
   "name": "ds2_2024_api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon --exec npx babel-node ./src/app.js -r dotenv/config dotenv_config_path=.env/dev.env",
-    "prod": "nodemon --exec npx babel-node ./src/app.js -r dotenv/config dotenv_config_path=.env/prod.env",
+    "start": "nodemon --exec npx babel-node ./src/index.js -r dotenv/config dotenv_config_path=env/dev.env",
+    "prod": "nodemon --exec npx babel-node ./src/index.js -r dotenv/config dotenv_config_path=.env",
+    "vercel-build": "echo hello",
+    "build": "babel src -d dist --copy-files",
     "test": "jest",
     "lint": "eslint .",
     "test:coverage": "jest --coverage",
@@ -34,10 +36,10 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.25.6",
+    "@babel/cli": "^7.25.9",
     "@babel/core": "^7.25.2",
     "@babel/node": "^7.25.0",
-    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-env": "^7.26.0",
     "@types/graphql-upload": "^16.0.7",
     "babel-runtime": "^6.26.0",
     "dotenv": "^16.4.5",
