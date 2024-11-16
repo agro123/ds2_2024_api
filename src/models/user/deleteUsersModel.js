@@ -1,4 +1,5 @@
 import supabase from '../../db';
+import User from '../user';
 
 const validateUserId = (userId) => {
     return !userId || typeof userId !== 'number';
@@ -14,6 +15,7 @@ const deleteUserInDatabase = async (userId) => {
 
 const deleteUser = async (userId) => {
     try {
+        console.log(userId, '------USER A VALIDAR-------');
         if (validateUserId(userId)) {
             return {
                 success: false,
@@ -22,6 +24,9 @@ const deleteUser = async (userId) => {
         }
 
         const userExist = await User.getUserById(userId);
+
+        console.log(userExist, "---userExist--");
+
         if (!userExist) {
             return {
                 success: false,
@@ -42,7 +47,9 @@ const deleteUser = async (userId) => {
             success: true,
             message: 'User deleted successfully.',
         };
+
     } catch (error) {
+        console.log(error, 'Se fue por el catch');
         return {
             success: false,
             message: 'Error while processing the request.',
