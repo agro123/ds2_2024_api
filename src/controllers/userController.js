@@ -33,8 +33,8 @@ const updateUser = async (req, res) => {
 };
 
 // Eliminar un usuario
-const deleteUser = (req, res) => {
-    const deletedUser = User.deleteUser(parseInt(req.params.id));
+const deleteUser = async (req, res) => {
+    const deletedUser = await User.deleteUser(parseInt(req.params.id));
     if (deletedUser) {
         res.json(deletedUser);
     } else {
