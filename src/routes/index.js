@@ -12,9 +12,11 @@ router.put('/users/:id', userController.updateUser);     // Actualizar un usuari
 router.delete('/users/:id', userController.deleteUser);  // Eliminar un usuario
 router.post('/users/login/', userController.loginUser);  // login de usuarios
 
+
 //PQRSD
 router.get('/pqrsd/', pqrsController.getPqrds);          // Obtener todas las PQRS
-router.post('/pqrsd/', pqrsController.createPqrsd);      // Crear nueva PQRS
+router.post('/pqrsd/', pqrsController.createPqrsd);   
+router.put('/pqrsd/:id', pqrsController.updatePqrsd);   // Crear nueva PQRS
 
 
 export default router;
