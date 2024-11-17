@@ -1,5 +1,5 @@
 import Pqrsd from '../models/pqrsd';
-import updtatePqrsdModel from '../models/pqrsd/updtatePqrsdModel'
+import updtatePqrsdModel from '../models/pqrsd/updtatePqrsdModel';
 
 
 const getPqrds = async (req, res) => {
