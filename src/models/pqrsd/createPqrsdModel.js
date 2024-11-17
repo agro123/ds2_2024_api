@@ -1,30 +1,28 @@
 import supabase from '../../db';
 
-const createPqrsd = async (user) => {
+const createPqrsd = async (pqrsd) => {
     try {
         const { data, error } = await supabase
             .from('pqrsd')
             .insert([{
-                first_name: user.first_name,
-                last_name: user.last_name,
-                type_document: user.type_document,
-                number_document: user.number_document,
-                object_pqrsd: user.object_pqrsd,
-                response_email: false,
-                status: 1,
-                email: user.email,
-                type_pqrsd: user.type_pqrsd,
+                first_name: pqrsd.first_name,
+                last_name: pqrsd.last_name,
+                type_document: pqrsd.type_document,
+                number_document: pqrsd.number_document,
+                object_pqrsd: pqrsd.object_pqrsd,
+                status: 0,
+                email: pqrsd.email,
+                type_pqrsd: pqrsd.type_pqrsd,
             }])
             .select();
 
-        // Verificamos si hay un error y lo devolvemos
         if (error) {
-            return error;  // Aquí devolvemos el error tal cual
+            return error;
         }
 
-        return data; // Devolver los datos si no hay error
+        return data;
     } catch (error) {
-        return error.message || 'Error inesperado';  // Manejo de errores inesperados
+        return error.message || 'Error inesperado';
     }
 };
 

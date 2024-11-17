@@ -22,6 +22,7 @@ describe('Routes', () => {
       { method: 'post', path: '/users/login/' },
       { method: 'get', path: '/pqrsd/' },
       { method: 'post', path: '/pqrsd/' },
+      { method: 'put', path: '/pqrsd/:id' },
     ]);
   });
 });
