@@ -1,5 +1,4 @@
 import Pqrsd from '../models/pqrsd';
-import updtatePqrsdModel from '../models/pqrsd/updtatePqrsdModel';
 
 
 const getPqrds = async (req, res) => {
@@ -27,7 +26,7 @@ const updatePqrsd = async (req, res) => {
     if (missingFields.length) return res.status(400).json({ message: `Faltan campos: ${missingFields.join(', ')}` });
 
     try {
-        const updatedPqrsd = await updtatePqrsdModel(id, updates);
+        const updatedPqrsd = await Pqrsd.updtatePqrsdModel(id, updates);
         if (updatedPqrsd.success) return res.status(200).json(updatedPqrsd);
         return res.status(400).json({ message: 'No se pudo actualizar el PQRSD', error: updatedPqrsd.error });
     } catch (error) {
