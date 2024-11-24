@@ -10,7 +10,6 @@ const getUserById = async (id) => {
         console.error('Error fetching user:', error);
         return null;
     }
-    console.log(data, "-----DATA DE LA FUNCION getUserById ");
     return data;
 };
 

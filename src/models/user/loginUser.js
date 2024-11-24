@@ -24,7 +24,7 @@ const loginUser = async (username, password) => {
     // Generar el token JWT
     const token = jwt.sign(
         { ...userWithoutPassword },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET || 'DS2_PR0J3C7_2024_k3y',
         { expiresIn: '2w' }
     );
 

@@ -214,4 +214,19 @@ describe("PQRSD Model", () => {
             expect(error.message).toEqual('Unexpected error');
         }
     });
+
+    test('getAllpqrss should return error message on error', async () => {
+        
+        // Mock de supabase para simular un fallo
+        supabase.from.mockReturnValue({
+            select: jest.fn().mockResolvedValue({
+                data: null,
+                error: { message: 'Database error' }
+            })
+        });
+
+        const result = await PqrsdModel.getAllPQRSDs();
+
+        expect(result).toHaveProperty('message');
+    });
 });
