@@ -1,6 +1,6 @@
 import supabase from '../../db';
 import bcrypt from 'bcrypt';
-
+import jwt from 'jsonwebtoken';
 
 const loginUser = async (username, password) => {
 
@@ -19,9 +19,16 @@ const loginUser = async (username, password) => {
     if (!passwordMatch) {
         return { error: 'Usuario o contraseña incorrectos' };
     }
-
     const { password: _, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+
+    // Generar el token JWT
+    const token = jwt.sign(
+        { ...userWithoutPassword },
+        process.env.JWT_SECRET,
+        { expiresIn: '2w' }
+    );
+
+    return {...userWithoutPassword, token};
 };
 
 export default loginUser;
