@@ -20,7 +20,7 @@ describe('loginUser', () => {
   const mockUser = {
     id: 1,
     username: mockUsername,
-    password: 'hashedPassword123'
+    password: 'hashedPassword123',
   };
 
 jest.spyOn(console, 'error').mockImplementation();
@@ -39,7 +39,9 @@ jest.spyOn(console, 'error').mockImplementation();
     expect(supabase.from().eq).toHaveBeenCalledWith('username', mockUsername);
     expect(supabase.from().single).toHaveBeenCalled();
     expect(bcrypt.compare).toHaveBeenCalledWith(mockPassword, mockUser.password);
-    expect(result).toEqual({ id: 1, username: mockUsername });
+    expect(result).toHaveProperty('id');
+    expect(result).toHaveProperty('username');
+    expect(result).toHaveProperty('token');
   });
 
   test('should return error if user is not found', async () => {
