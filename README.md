@@ -67,10 +67,10 @@ Esta es una API REST desarrollada para gestionar PQRS (Peticiones, Quejas, Recla
 5. **Pruebas:**
    - Ejecutar las pruebas unitarias con Jest:
      ```bash
-     npm test
+     npm run test
      ```
       ```bash
-     npm test:coverage
+     npm run test:coverage
      ```
 
 ## **Endpoints Principales**
@@ -94,4 +94,4 @@ Esta es una API REST desarrollada para gestionar PQRS (Peticiones, Quejas, Recla
 
 La API está desplegada en **Render** y es accesible públicamente. Puedes probar los endpoints en el siguiente enlace:
 
-- **URL Base:** [https://ds2-2024-api.onrender.com](https://ds2-2024-api.onrender.com)
+- **URL Base:** [https://ds2-2024-api.onrender.com](https://ds2-2024-api-v1ea.onrender.com/)
